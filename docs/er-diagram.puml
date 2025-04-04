@@ -1,0 +1,154 @@
+@startuml EC Site ER Diagram
+
+' 使用するスキンの設定
+!theme plain
+skinparam linetype ortho
+
+' Users関連のテーブル
+entity "users" as users {
+  * id : bigint <<PK>>
+  --
+  * email : varchar(255)
+  * password : varchar(255)
+  * name : varchar(255)
+  * type : enum('admin','seller','buyer')
+  * status : enum('active','inactive')
+  * email_verified_at : timestamp
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "user_profiles" as user_profiles {
+  * id : bigint <<PK>>
+  --
+  * user_id : bigint <<FK>>
+  * phone : varchar(255)
+  * address : text
+  * postal_code : varchar(255)
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+' 商品関連のテーブル
+entity "categories" as categories {
+  * id : bigint <<PK>>
+  --
+  * name : varchar(255)
+  * slug : varchar(255)
+  parent_id : bigint <<FK>>
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "products" as products {
+  * id : bigint <<PK>>
+  --
+  * seller_id : bigint <<FK>>
+  * category_id : bigint <<FK>>
+  * name : varchar(255)
+  * description : text
+  * price : decimal
+  * stock : integer
+  * status : enum('active','inactive')
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "product_images" as product_images {
+  * id : bigint <<PK>>
+  --
+  * product_id : bigint <<FK>>
+  * image_path : varchar(255)
+  * is_primary : boolean
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+' 注文関連のテーブル
+entity "carts" as carts {
+  * id : bigint <<PK>>
+  --
+  * buyer_id : bigint <<FK>>
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "cart_items" as cart_items {
+  * id : bigint <<PK>>
+  --
+  * cart_id : bigint <<FK>>
+  * product_id : bigint <<FK>>
+  * quantity : integer
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "orders" as orders {
+  * id : bigint <<PK>>
+  --
+  * buyer_id : bigint <<FK>>
+  * status : enum('pending','paid','shipped','delivered','cancelled')
+  * total_amount : decimal
+  * shipping_address : text
+  * shipping_phone : varchar(255)
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "order_items" as order_items {
+  * id : bigint <<PK>>
+  --
+  * order_id : bigint <<FK>>
+  * product_id : bigint <<FK>>
+  * seller_id : bigint <<FK>>
+  * quantity : integer
+  * price : decimal
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+' レビュー関連のテーブル
+entity "reviews" as reviews {
+  * id : bigint <<PK>>
+  --
+  * product_id : bigint <<FK>>
+  * buyer_id : bigint <<FK>>
+  * rating : integer
+  * comment : text
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+' 取引関連のテーブル
+entity "transactions" as transactions {
+  * id : bigint <<PK>>
+  --
+  * order_id : bigint <<FK>>
+  * seller_id : bigint <<FK>>
+  * amount : decimal
+  * commission : decimal
+  * status : enum('pending','completed','failed')
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+' リレーションシップ
+users ||--o{ user_profiles
+users ||--o{ products
+users ||--o{ orders
+users ||--o{ reviews
+users ||--o{ transactions
+
+categories ||--o{ products
+categories ||--o{ categories
+
+products ||--o{ product_images
+products ||--o{ cart_items
+products ||--o{ order_items
+products ||--o{ reviews
+
+carts ||--o{ cart_items
+orders ||--o{ order_items
+orders ||--o{ transactions
+
+@enduml 
