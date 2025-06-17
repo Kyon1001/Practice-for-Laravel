@@ -15,18 +15,20 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'type',
+        'status',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -44,5 +46,53 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * 出品者として出品した商品
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'seller_id');
+    }
+
+    /**
+     * 購入者として行った注文
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'buyer_id');
+    }
+
+    /**
+     * 購入者のカート
+     */
+    public function cart()
+    {
+        return $this->hasOne(Cart::class, 'buyer_id');
+    }
+
+    /**
+     * 管理者かどうか
+     */
+    public function isAdmin()
+    {
+        return $this->type === 'admin';
+    }
+
+    /**
+     * 出品者かどうか
+     */
+    public function isSeller()
+    {
+        return $this->type === 'seller';
+    }
+
+    /**
+     * 購入者かどうか
+     */
+    public function isBuyer()
+    {
+        return $this->type === 'buyer';
     }
 }
