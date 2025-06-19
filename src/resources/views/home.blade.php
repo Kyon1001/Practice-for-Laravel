@@ -67,7 +67,7 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach($featuredProducts as $product)
+            @foreach($newProducts as $product)
             <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
                 <a href="{{ route('products.show', $product) }}">
                     <!-- 商品画像プレースホルダー -->

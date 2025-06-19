@@ -43,9 +43,9 @@ class CartApiController extends Controller
                 ]);
             }
             
-            $totalAmount = $cart->items->sum(function ($item) {
-                return $item->product->price * $item->quantity;
-            });
+            $totalAmount = $cart->items->reduce(function ($carry, $item) {
+                return $carry + ($item->product->price * $item->quantity);
+            }, 0);
             
             $totalQuantity = $cart->items->sum('quantity');
             

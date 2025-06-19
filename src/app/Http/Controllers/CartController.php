@@ -26,9 +26,9 @@ class CartController extends Controller
             ->get();
         
         // 合計金額計算
-        $totalAmount = $cartItems->sum(function ($item) {
-            return $item->product->price * $item->quantity;
-        });
+        $totalAmount = $cartItems->reduce(function ($carry, $item) {
+            return $carry + ($item->product->price * $item->quantity);
+        }, 0);
         
         return view('cart.index', compact('cartItems', 'totalAmount'));
     }
