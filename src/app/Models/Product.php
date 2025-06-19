@@ -72,6 +72,46 @@ class Product extends Model
     }
 
     /**
+     * レビュー
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * 平均評価を取得
+     */
+    public function averageRating()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
+
+    /**
+     * レビュー数を取得
+     */
+    public function reviewCount()
+    {
+        return $this->reviews()->count();
+    }
+
+    /**
+     * お気に入り
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * 指定ユーザーがお気に入りに登録しているか
+     */
+    public function isWishlistedBy($userId)
+    {
+        return $this->wishlists()->where('user_id', $userId)->exists();
+    }
+
+    /**
      * 在庫があるかどうか
      */
     public function hasStock()

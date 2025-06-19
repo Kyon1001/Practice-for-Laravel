@@ -73,6 +73,22 @@ class User extends Authenticatable
     }
 
     /**
+     * お気に入り商品
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * レビュー
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'buyer_id');
+    }
+
+    /**
      * 管理者かどうか
      */
     public function isAdmin()

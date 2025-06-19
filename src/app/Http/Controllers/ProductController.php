@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -65,7 +66,7 @@ class ProductController extends Controller
             abort(404);
         }
 
-        $product->load(['category', 'seller', 'images']);
+        $product->load(['category', 'seller', 'images', 'reviews.buyer']);
 
         // 関連商品（同じカテゴリーの他の商品）
         $relatedProducts = Product::with(['category', 'seller'])
@@ -76,7 +77,21 @@ class ProductController extends Controller
             ->limit(4)
             ->get();
 
-        return view('products.show', compact('product', 'relatedProducts'));
+        // レビューをページネーション
+        $reviews = $product->reviews()
+            ->with('buyer')
+            ->latest()
+            ->paginate(5);
+
+        // ユーザーの既存レビューを取得（ログイン時）
+        $userReview = null;
+        if (Auth::check()) {
+            $userReview = $product->reviews()
+                ->where('buyer_id', Auth::id())
+                ->first();
+        }
+
+        return view('products.show', compact('product', 'relatedProducts', 'reviews', 'userReview'));
     }
 
     /**
