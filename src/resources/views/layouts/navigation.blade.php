@@ -24,6 +24,9 @@
                     <x-nav-link :href="route('wishlist.index')" :active="request()->routeIs('wishlist.*')">
                         お気に入り
                     </x-nav-link>
+                    <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
+                        注文履歴
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -85,9 +88,12 @@
             <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
                 カート
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('wishlist.index')" :active="request()->routeIs('wishlist.*')">
-                お気に入り
-            </x-responsive-nav-link>
+                         <x-responsive-nav-link :href="route('wishlist.index')" :active="request()->routeIs('wishlist.*')">
+                 お気に入り
+             </x-responsive-nav-link>
+             <x-responsive-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
+                 注文履歴
+             </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
