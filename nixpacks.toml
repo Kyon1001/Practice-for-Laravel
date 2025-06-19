@@ -1,10 +1,14 @@
 [start]
-cmd = "cd src && composer install --no-dev --optimize-autoloader --no-scripts --prefer-dist && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT --memory-limit=256M"
+cmd = "cd src && php artisan serve --host=0.0.0.0 --port=$PORT --memory-limit=128M"
 
 [variables]
 APP_ENV = "production"
 APP_DEBUG = "false"
+MEMORY_LIMIT = "128M"
 OPTIMIZE_MEMORY = "true"
 
 [build]
-buildCmd = "cd src && composer install --no-dev --optimize-autoloader --no-scripts --prefer-dist" 
+buildCmd = "cd src && composer install --no-dev --optimize-autoloader --no-scripts --prefer-dist --no-suggest"
+
+[buildpack]
+providers = ["php"] 
