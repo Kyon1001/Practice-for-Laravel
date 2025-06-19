@@ -1,0 +1,38 @@
+# Minimal Dockerfile for Railway (PHP built-in server)
+FROM php:8.2-cli-alpine
+
+# Install only essential packages
+RUN apk add --no-cache \
+    zip \
+    unzip \
+    git
+
+# Install only required PHP extensions
+RUN apk add --no-cache \
+    libpng-dev \
+    libzip-dev \
+    && docker-php-ext-install \
+    pdo_mysql \
+    zip \
+    gd
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy application
+COPY src/ .
+
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html
+
+# Expose port
+EXPOSE $PORT
+
+# Use PHP built-in server (simpler, less memory)
+CMD php artisan serve --host=0.0.0.0 --port=$PORT 

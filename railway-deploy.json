@@ -1,0 +1,32 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile",
+    "buildCommand": "echo 'Optimized build starting...'",
+    "watchPatterns": ["src/**/*"]
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "sleepApplication": false,
+    "restartPolicyType": "ON_FAILURE",
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 30
+  },
+  "variables": {
+    "NODE_ENV": "production",
+    "APP_ENV": "production",
+    "APP_DEBUG": "false",
+    "OPTIMIZE_MEMORY": "true"
+  },
+  "resources": {
+    "limits": {
+      "memory": "512Mi",
+      "cpu": "0.5"
+    },
+    "requests": {
+      "memory": "256Mi", 
+      "cpu": "0.25"
+    }
+  }
+} 
