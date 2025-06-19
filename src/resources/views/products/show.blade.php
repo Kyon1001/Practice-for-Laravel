@@ -409,8 +409,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     stars.forEach(star => {
         star.addEventListener('click', function() {
-            const rating = this.dataset.rating;
-            ratingInputs[rating - 1].checked = true;
+            const rating = parseInt(this.dataset.rating);
+            if (ratingInputs[rating - 1]) {
+                ratingInputs[rating - 1].checked = true;
+            }
             
             stars.forEach((s, index) => {
                 if (index < rating) {
@@ -424,9 +426,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         star.addEventListener('mouseover', function() {
-            const rating = this.dataset.rating;
+            const rating = parseInt(this.dataset.rating);
             stars.forEach((s, index) => {
                 if (index < rating) {
+                    s.classList.remove('text-gray-300');
+                    s.classList.add('text-yellow-400');
+                } else {
+                    s.classList.remove('text-yellow-400');
+                    s.classList.add('text-gray-300');
+                }
+            });
+        });
+        
+        star.addEventListener('mouseleave', function() {
+            // 選択済みの評価を復元
+            const checkedRating = document.querySelector('input[name="rating"]:checked');
+            const selectedRating = checkedRating ? parseInt(checkedRating.value) : 0;
+            
+            stars.forEach((s, index) => {
+                if (index < selectedRating) {
                     s.classList.remove('text-gray-300');
                     s.classList.add('text-yellow-400');
                 } else {
@@ -440,7 +458,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // レビュー編集機能（簡易版）
 function editReview(reviewId) {
-    alert('レビュー編集機能は今後実装予定です。');
+    if (confirm('レビューを編集しますか？')) {
+        alert('レビュー編集機能は今後実装予定です。（レビューID: ' + reviewId + '）');
+    }
 }
 </script>
 @endsection 

@@ -26,9 +26,9 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
             <!-- ナビゲーション -->
-            <nav class="bg-white shadow-lg">
+            <nav class="bg-white shadow-lg sticky top-0 z-50">
                 <div class="max-w-7xl mx-auto px-4">
-                    <div class="flex justify-between h-16">
+                    <div class="flex justify-between items-center h-16">
                         <!-- ロゴ -->
                         <div class="flex items-center">
                             <a href="{{ route('home') }}" class="text-xl font-bold text-gray-800">
@@ -41,8 +41,8 @@
                             <form action="{{ route('products.search') }}" method="GET" class="flex">
                                 <input type="text" name="q" placeholder="商品を検索..." 
                                        value="{{ request('q') }}"
-                                       class="flex-1 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700">
+                                       class="flex-1 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                                     検索
                                 </button>
                             </form>
@@ -99,10 +99,10 @@
             @endif
 
             <!-- メインコンテンツ -->
-            <main>
+            <main class="pt-4">
                 <!-- フラッシュメッセージ -->
                 @if(session('success'))
-                    <div class="max-w-7xl mx-auto px-4 pt-4">
+                    <div class="max-w-7xl mx-auto px-4 pb-4">
                         <div class="bg-green-50 border border-green-200 rounded-md p-4">
                             <div class="flex">
                                 <div class="flex-shrink-0">
@@ -119,7 +119,7 @@
                 @endif
 
                 @if(session('error'))
-                    <div class="max-w-7xl mx-auto px-4 pt-4">
+                    <div class="max-w-7xl mx-auto px-4 pb-4">
                         <div class="bg-red-50 border border-red-200 rounded-md p-4">
                             <div class="flex">
                                 <div class="flex-shrink-0">
