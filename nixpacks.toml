@@ -9,13 +9,5 @@ cmds = [
     "npm run build"
 ]
 
-[phases.build]
-cmds = [
-    "cd src",
-    "php artisan config:cache",
-    "php artisan route:cache",
-    "php artisan view:cache"
-]
-
 [start]
-cmd = "cd src && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=$PORT" 
+cmd = "cd src && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT" 
