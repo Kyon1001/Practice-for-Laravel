@@ -143,7 +143,7 @@
             <div class="mt-10">
                 @auth
                     @if($product->stock > 0)
-                        <form action="#" method="POST">
+                        <form action="{{ route('cart.add', $product) }}" method="POST">
                             @csrf
                             <div class="flex items-center space-x-4 mb-4">
                                 <label for="quantity" class="text-sm font-medium text-gray-700">数量:</label>
