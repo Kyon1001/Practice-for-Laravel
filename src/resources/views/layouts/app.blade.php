@@ -11,8 +11,17 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/cart.js'])
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        
+        <!-- Custom Styles -->
+        <style>
+            .cart-count {
+                font-size: 0.75rem;
+                min-width: 1.25rem;
+                height: 1.25rem;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -176,5 +185,76 @@
                 </div>
             </footer>
         </div>
+
+        <!-- JavaScript -->
+        <script>
+            // CSRF Token Setup
+            window.csrfToken = '{{ csrf_token() }}';
+            
+            // Cart functionality
+            async function addToCart(productId, quantity = 1) {
+                try {
+                    const response = await fetch('/api/cart/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': window.csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            product_id: productId,
+                            quantity: quantity
+                        })
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        updateCartCount(data.cart_count);
+                        showSuccess('商品をカートに追加しました');
+                    } else {
+                        showError(data.message || 'エラーが発生しました');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError('ネットワークエラーが発生しました');
+                }
+            }
+
+            function updateCartCount(count) {
+                const cartCount = document.querySelector('.cart-count');
+                if (cartCount) {
+                    cartCount.textContent = count;
+                    cartCount.style.display = count > 0 ? 'flex' : 'none';
+                }
+            }
+
+            function showSuccess(message) {
+                // Simple alert for now - can be enhanced later
+                alert(message);
+            }
+
+            function showError(message) {
+                alert(message);
+            }
+
+            // Initialize cart count on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                // Fetch current cart count
+                fetch('/api/cart/count', {
+                    headers: {
+                        'X-CSRF-TOKEN': window.csrfToken,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateCartCount(data.count);
+                    }
+                })
+                .catch(error => console.error('Error loading cart count:', error));
+            });
+        </script>
     </body>
 </html>
