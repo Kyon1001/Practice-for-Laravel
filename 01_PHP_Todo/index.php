@@ -31,6 +31,24 @@ file_put_contents($file,  implode(PHP_EOL, $tasks) . PHP_EOL);
 
 ?>
 
+<style>
+body {
+    background-color: #0d1117;
+    color: #c9d1d9;
+}
+
+input,
+button {
+    background-color: #161b22;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+}
+
+button:hover {
+    cursor: pointer;
+}
+</style>
+
 <h1>ToDoアプリ</h1>
 
 <form method="post">
